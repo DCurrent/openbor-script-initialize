@@ -67,7 +67,7 @@ char dc_initialize_random_alias()
 	}
 
 	// Catch bad values here before we crash.
-	if (typeof(result) != openborconstant("VT_STRING"))
+	if (typeof(result) != openborconstant("VT_STR"))
 	{
 		result = "#Error - Alias NA";
 	}

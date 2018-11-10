@@ -7,7 +7,7 @@
 
 // This is really just a shortcut for function calls that
 // almost every level spawn will need to make.
-void initialize_level_spawn()
+void dc_initialize_level_spawn()
 {
 	void ent;
 	void alias; // Caller's alias.
