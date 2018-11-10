@@ -7,7 +7,7 @@
 // 
 // Randomly choose return index of one of the target entity's 
 // non-hidden color sets.
-char dc_random_color_set()
+char dc_initialize_random_color_set()
 {
 	void ent;
 	int hidden_map_lower;
