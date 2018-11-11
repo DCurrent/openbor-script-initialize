@@ -9,7 +9,7 @@ void dc_initialize_alias_list_count()
 
 	// 0 the cursor.
 	i = 0;
-	
+
 	do
 	{
 		populated = getlocalvar(DC_INITIALIZE_VAR_KEY_ALIAS_LIST + i);
@@ -43,7 +43,7 @@ void dc_initialize_alias_quick_add(char name)
 
 		setlocalvar(DC_INITIALIZE_VAR_KEY_ALIAS_LIST + count, name);
 	//}
-	
+
 	//add(alias_list, 0, name);
 }
 
@@ -88,7 +88,7 @@ char dc_initialize_alias_from_list()
 	// Get number of entries in localvar list.
 	count = dc_initialize_alias_list_count();
 
-	// Use count as upper bound for random 
+	// Use count as upper bound for random
 	// number generator.
 	dc_d20_set_range_upper(count);
 
@@ -121,7 +121,7 @@ char dc_initialize_alias_from_array()
 		size = size(list);
 		size--;
 
-		// Use last index as upper bound for random 
+		// Use last index as upper bound for random
 		// number generator.
 		dc_d20_set_range_upper(size);
 
@@ -141,7 +141,7 @@ char dc_initialize_alias_from_array()
 //
 // Get a random alias from text list. Text format is
 // as follows:
-// 
+//
 // model_1_name alias_1 alias_2 alias_2 ...
 // model_2_name alias_1 alias_2 alias_3 ...
 //
@@ -165,7 +165,7 @@ char dc_initialize_alias_from_text()
 	// Get names text file index.
 	names = getglobalvar("filestream_names");
 
-	// If there is no file index, then we need to 
+	// If there is no file index, then we need to
 	// open one.
 	if (typeof(names) == openborconstant("VT_EMPTY"))
 	{
@@ -179,7 +179,7 @@ char dc_initialize_alias_from_text()
 	setfilestreamposition(names, 0);
 	match = getfilestreamargument(names, 0, "string");
 
-	// Look through all rows in first colmun until model name is found.   
+	// Look through all rows in first colmun until model name is found.
 	do
 	{
 		filestreamnextline(names);
@@ -217,7 +217,7 @@ char dc_initialize_alias_from_text()
 // 2018-10-16
 //
 // Get a count of columns in current row of filestream for
-// reference. Ex: If there are 16 columns, function will 
+// reference. Ex: If there are 16 columns, function will
 // return 15 (0-15 zero indexed).
 int dc_initialize_filestream_enumerate_column(int filestream)
 {
@@ -242,7 +242,7 @@ int dc_initialize_filestream_enumerate_column(int filestream)
 
 	} while (value);
 
-	// Decrement by 1 to compensate for zero indexing.	
+	// Decrement by 1 to compensate for zero indexing.
 	count--;
 
 	return count;
