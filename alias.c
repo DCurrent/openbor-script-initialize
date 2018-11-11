@@ -2,43 +2,74 @@
 
 #import "data/scripts/dc_initialize/config.c"
 
+void dc_initialize_alias_list_count()
+{
+	int i;
+	char populated;
+
+	// 0 the cursor.
+	i = 0;
+	
+	do
+	{
+		populated = getlocalvar(DC_INITIALIZE_VAR_KEY_ALIAS_LIST + i);
+
+		i++;
+	} while (populated);
+
+	// Compensate for 0 index and running at least once.
+	i--;
+
+	// Return count.
+	return i;
+}
+
 // Caskey, Damon V.
 // 2018-10-17
 //
 // Add an entry to list of possible name choices from array.
-void dc_alias_quick_add(char name)
+void dc_initialize_alias_quick_add(char name)
 {
 	void alias_list;
+	int count;
 
-	alias_list = getlocalvar(DC_INITIALIZE_VAR_KEY_ALIAS_LIST);
+	//alias_list = getlocalvar(DC_INITIALIZE_VAR_KEY_ALIAS_LIST);
 
-	if (!alias_list)
-	{
-		alias_list = array(0);
+	count = dc_initialize_alias_list_count();
 
-		setlocalvar(DC_INITIALIZE_VAR_KEY_ALIAS_LIST, alias_list);
-	}
+	//if (!alias_list)
+	//{
+		//alias_list = array(0);
 
-	add(alias_list, 0, name);
+		setlocalvar(DC_INITIALIZE_VAR_KEY_ALIAS_LIST + count, name);
+	//}
+	
+	//add(alias_list, 0, name);
 }
 
 // Caskey, Damon V.
 // 2018-10-17
 //
 // Attempt to return a random alias from array first,
-// then from bin file (bin file in progress.).
-char dc_random_alias()
+// then from bin file.
+char dc_initialize_random_alias()
 {
 	void ent;
 	char result;
 
 	ent = dc_initialize_get_entity();
 
-	result = dc_alias_from_array();
+	result = dc_initialize_alias_from_list();
 
 	if (!result)
 	{
-		result = dc_alias_from_text(ent);
+		result = dc_initialize_alias_from_text(ent);
+	}
+
+	// Catch bad values here before we crash.
+	if (typeof(result) != openborconstant("VT_STR"))
+	{
+		result = "#Error - Alias NA";
 	}
 
 	return result;
@@ -47,8 +78,34 @@ char dc_random_alias()
 // Caskey, Damon V.
 // 2018-10-17
 //
+// Get random alias from an index set of local vars.
+char dc_initialize_alias_from_list()
+{
+	char result;
+	int count;
+	int random_index;
+
+	// Get number of entries in localvar list.
+	count = dc_initialize_alias_list_count();
+
+	// Use count as upper bound for random 
+	// number generator.
+	dc_d20_set_range_upper(count);
+
+	// Generate random number.
+	random_index = dc_d20_random_int();
+
+	result = getlocalvar(DC_INITIALIZE_VAR_KEY_ALIAS_LIST + random_index);
+
+	return result;
+
+}
+
+// Caskey, Damon V.
+// 2018-10-17
+//
 // Get a random alias from list of names.
-char dc_alias_from_array()
+char dc_initialize_alias_from_array()
 {
 	char result;
 	void list;
@@ -91,7 +148,7 @@ char dc_alias_from_array()
 // Model name is the model's name (duh), and
 // alias choices list left to right. Each model
 // may have as many alias names as desisred.
-char dc_alias_from_text()
+char dc_initialize_alias_from_text()
 {
 	void ent;
 	char model;
@@ -134,7 +191,7 @@ char dc_alias_from_text()
 	if (match)
 	{
 		// Get number of columns with a name value.
-		column_count = dc_filestream_enumerate_column(names);
+		column_count = dc_initialize_filestream_enumerate_column(names);
 
 		// Set maximum random number to column count.
 		dc_d20_set_range_upper(column_count);
@@ -162,7 +219,7 @@ char dc_alias_from_text()
 // Get a count of columns in current row of filestream for
 // reference. Ex: If there are 16 columns, function will 
 // return 15 (0-15 zero indexed).
-int dc_filestream_enumerate_column(int filestream)
+int dc_initialize_filestream_enumerate_column(int filestream)
 {
 	int count;
 	char value;

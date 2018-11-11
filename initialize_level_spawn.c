@@ -7,7 +7,7 @@
 
 // This is really just a shortcut for function calls that
 // almost every level spawn will need to make.
-void initialize_level_spawn()
+void dc_initialize_level_spawn()
 {
 	void ent;
 	void alias; // Caller's alias.
@@ -22,7 +22,7 @@ void initialize_level_spawn()
 
 	if (map == 1)
 	{
-		map = dc_random_color_set(ent);
+		map = dc_initialize_random_color_set();
 
 		changeentityproperty(ent, "map", map);
 	}
@@ -33,7 +33,7 @@ void initialize_level_spawn()
 
 	if (alias == "Random")
 	{
-		alias = dc_random_alias(ent);
+		alias = dc_initialize_random_alias();
 
 		changeentityproperty(ent, "name", alias);
 	}
