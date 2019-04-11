@@ -1,5 +1,6 @@
 // Dependencies
 #include "data/scripts/dc_d20/main.c"
+#include "data/scripts/dc_fidelity/main.c"
 
 #ifndef DC_INITIALIZE_CONFIG
 #define DC_INITIALIZE_CONFIG 1
