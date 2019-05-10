@@ -19,8 +19,8 @@ void dc_initialize_flash_default()
 	drawmethod = get_entity_property(ent, "drawmethod");
 
 	// Get random numbers for rotation.
-	dc_d20_set_range_lower(0);
-	dc_d20_set_range_upper(359);
+	dc_d20_set_range_min(0);
+	dc_d20_set_range_max(359);
 
 	rotate = dc_d20_random_int();
 

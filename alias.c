@@ -12,7 +12,7 @@ void dc_initialize_alias_list_count()
 
 	do
 	{
-		populated = getlocalvar(DC_INITIALIZE_VAR_KEY_ALIAS_LIST + i);
+		populated = getlocalvar(DC_INITIALIZE_MEMBER_ALIAS_LIST + i);
 
 		i++;
 	} while (populated);
@@ -33,7 +33,7 @@ void dc_initialize_alias_quick_add(char name)
 	void alias_list;
 	int count;
 
-	//alias_list = getlocalvar(DC_INITIALIZE_VAR_KEY_ALIAS_LIST);
+	//alias_list = getlocalvar(DC_INITIALIZE_MEMBER_ALIAS_LIST);
 
 	count = dc_initialize_alias_list_count();
 
@@ -41,7 +41,7 @@ void dc_initialize_alias_quick_add(char name)
 	//{
 		//alias_list = array(0);
 
-		setlocalvar(DC_INITIALIZE_VAR_KEY_ALIAS_LIST + count, name);
+		setlocalvar(DC_INITIALIZE_MEMBER_ALIAS_LIST + count, name);
 	//}
 
 	//add(alias_list, 0, name);
@@ -90,12 +90,12 @@ char dc_initialize_alias_from_list()
 
 	// Use count as upper bound for random
 	// number generator.
-	dc_d20_set_range_upper(count);
+	dc_d20_set_range_max(count);
 
 	// Generate random number.
 	random_index = dc_d20_random_int();
 
-	result = getlocalvar(DC_INITIALIZE_VAR_KEY_ALIAS_LIST + random_index);
+	result = getlocalvar(DC_INITIALIZE_MEMBER_ALIAS_LIST + random_index);
 
 	return result;
 
@@ -112,7 +112,7 @@ char dc_initialize_alias_from_array()
 	int size;
 	int random_index;
 
-	list = getlocalvar(DC_INITIALIZE_VAR_KEY_ALIAS_LIST);
+	list = getlocalvar(DC_INITIALIZE_MEMBER_ALIAS_LIST);
 
 	// Do we have a valid list of alias names?
 	if(list)
@@ -123,7 +123,7 @@ char dc_initialize_alias_from_array()
 
 		// Use last index as upper bound for random
 		// number generator.
-		dc_d20_set_range_upper(size);
+		dc_d20_set_range_max(size);
 
 		// Generate random number.
 		random_index = dc_d20_random_int();
@@ -194,7 +194,7 @@ char dc_initialize_alias_from_text()
 		column_count = dc_initialize_filestream_enumerate_column(names);
 
 		// Set maximum random number to column count.
-		dc_d20_set_range_upper(column_count);
+		dc_d20_set_range_max(column_count);
 
 		// Generate random number.
 		random_index = dc_d20_random_int();

@@ -10,8 +10,8 @@
 #define DC_INITIALIZE_DEFAULT_ENT			getlocalvar("self")
 
 // Variable indentifiers.
-#define DC_INITIALIZE_VAR_KEY_INSTANCE		"dcini_0"
-#define DC_INITIALIZE_VAR_KEY_ENT			"dcini_1"
-#define DC_INITIALIZE_VAR_KEY_ALIAS_LIST	"dcini_2"
+#define DC_INITIALIZE_MEMBER_INSTANCE		"dcini_0"
+#define DC_INITIALIZE_MEMBER_ENT			"dcini_1"
+#define DC_INITIALIZE_MEMBER_ALIAS_LIST	"dcini_2"
 
 #endif // !DC_INITIALIZE
