@@ -24,23 +24,34 @@ void dc_initialize_flash_default()
 
 	rotate = dc_d20_random_int();
 
-	// Get attack force.
+	// Get an intensity value. Think of this as a percentage of base hit
+	// force. We start with a median force (DC_INITIALIZE_FLASH_INTENSITY_FORCE_MEDIAN) 
+	// and subtract that from the real force. Then we mutiply the result by a factor 
+	// of DC_INITIALIZE_FLASH_INTENSITY_FORCE_MUTIPLIER to give it more variance and 
+	// subtract the total value from DC_INITIALIZE_FLASH_INTENSITY_BASE. 
+	
+	// As an example, assume DC_INITIALIZE_FLASH_INTENSITY_BASE is 100.
+	//
+	// If DC_INITIALIZE_FLASH_INTENSITY_FORCE_MEDIAN is 10, an attack damage 
+	// of 10 is DC_INITIALIZE_FLASH_INTENSITY_BASE (i.e. 100% intensity), so
+	// the final intensity value is 100. If the attack is 5 damage, and 
+	// DC_INITIALIZE_FLASH_INTENSITY_FORCE_MUTIPLIER is 4, then intensity 
+	// will be 120. Damage of 15 would produce an intensity of 80. 
+	
+	// Once we have an intensity value we can use it to control size of flash 
+	// and speed of sound playback to create a dynamic experience. This is 
+	// based on OpenBOR's native damage based hitfx playback speed. It's important 
+	// to note, stronger attacks produce a LOWER intensity value. This is because
+	// the formula is intended to work as playback speed for hit sounds. 
+	
 	force = get_attack_property(openborvariant("lasthit_attack"), openborconstant("ATTACK_PROP_DAMAGE_FORCE"));
 
-	// Get an intensity value. Think of this as a percentage of base hit
-	// force. We start with a base force and subtract that from the real force. 
-	// Then we mutiply the result to give it more variance and subtract the total 
-	// value from 100. So if we have a base value of 10, an attack damage of 10 
-	// is 100 (i.e. 100% intensity). If the attack is 5 damage, and mutiplier 
-	// is 4, then intensity will be 80. Damage of 15 would produce an intensity 
-	// of 120. We can then use the intensity value to control size of flash
-	// and speed of sound playback to create a dynamic experience. This is based
-	// on OpenBOR's native damage based hitfx playback speed.
-	intensity = 100 - ((force - 10) * 4);
+	intensity = DC_INITIALIZE_FLASH_INTENSITY_BASE - ((force - DC_INITIALIZE_FLASH_INTENSITY_FORCE_MEDIAN) * DC_INITIALIZE_FLASH_INTENSITY_FORCE_MUTIPLIER);
 
-	// For size, we'll start with a bit of oversize and subtract our intensity
-	// value to get the final size.
-	size = 200 - intensity;
+	// For size, we'll start with a base size value and subtract intensity
+	// to get the final size. Since we're using drawmethods, a final size 
+	// value of 256 means the model sprites are displayed at 100% size.
+	size = DC_INITIALIZE_FLASH_SIZE_BASE - intensity;
 
 	// Apply the drawmethods for blending, rotation, and size.
 	//dc_kanga_z_position_autoscale(ent);
@@ -51,13 +62,13 @@ void dc_initialize_flash_default()
 	set_drawmethod_property(drawmethod, "scale_y", size);
 
 	// We'll cap our intenstiy ranges here and then use it for sound playback speed.
-	if (intensity > 130)
+	if (intensity > DC_INITIALIZE_FLASH_INTENSITY_SOUND_MAX)
 	{
-		intensity = 130;
+		intensity = DC_INITIALIZE_FLASH_INTENSITY_SOUND_MAX;
 	}
-	else if (intensity < 70)
+	else if (intensity < DC_INITIALIZE_FLASH_INTENSITY_SOUND_MIN)
 	{
-		intensity = 70;
+		intensity = DC_INITIALIZE_FLASH_INTENSITY_SOUND_MIN;
 	}
 
 	// Set the sound speed and play.
